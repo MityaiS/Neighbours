@@ -1,0 +1,77 @@
+{% extends "layout.html" %} {% block content %}
+<!-- {% for post in posts.items %}
+<article class="media content-section">
+  <img
+    class="rounded-circle article-img"
+    src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}"
+  />
+  <div class="media-body">
+    <div class="article-metadata">
+      <a
+        class="mr-2"
+        href="{{ url_for('users.user_posts', nickname=post.author.nickname) }}"
+        >{{ post.author.nickname }}</a
+      >
+      <small class="text-muted"
+        >{{ post.date_posted.strftime('%Y-%m-%d') }}</small
+      >
+      <a
+        class="text-muted"
+        href="{{ url_for('posts.post', post_id=post.id) }}"
+      ></a>
+    </div>
+    <p class="article-content">{{ post.content }}</p>
+  </div>
+</article>
+{% endfor %}  -->
+{% for post in posts.items %}
+<div class="container pb-3 mb-2 border-top">
+  <div class="col">
+    <div class="row border-bottom pb-1 pt-1">
+      <div class="col-2" style="width: 75px">
+        <a
+          href="{{ url_for('users.user_posts', nickname=post.author.nickname) }}"
+        >
+          <img
+            src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}"
+            class="img-fluid rounded-circle"
+            alt="avatar"
+          />
+        </a>
+      </div>
+      <div class="col">
+        <div class="d-flex flex-column">
+          <h5 class="fw-bold mb-0">{{post.author.nickname}}</h5>
+          <div class="m-0">
+            <a
+              class="text-black"
+              href="{{ url_for('posts.post', post_id=post.id) }}"
+              >Post</a
+            >
+            by {{post.author.name}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row pt-2 h4 ps-2">{{post.content}}</div>
+    <div class="row ps-2">
+      <div class="col p-0 text-muted">
+        {{ post.date_posted.strftime('%-I:%-M %p') }} &#183;
+        {{post.date_posted.strftime("%-m %b %Y")}} &#183; Neighbours
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %} {% for page_num in posts.iter_pages(left_edge=1, right_edge=1,
+left_current=1, right_current=2) %} {% if page_num %} {% if posts.page ==
+page_num %}
+<a class="btn btn-info mb-4" href="{{ url_for('main.home', page=page_num) }}"
+  >{{ page_num }}</a
+>
+{% else %}
+<a
+  class="btn btn-outline-info mb-4"
+  href="{{ url_for('main.home', page=page_num) }}"
+  >{{ page_num }}</a
+>
+{% endif %} {% else %} ... {% endif %} {% endfor %} {% endblock content %}
