@@ -109,6 +109,7 @@ def update_user(nickname):
         abort(403)
     user = User.query.filter_by(nickname=nickname).first_or_404()
     form = UpdateUserForm()
+    form.user_id.data = str(user.id)
     if form.validate_on_submit():
         user.name = form.name.data
         if form.picture.data:

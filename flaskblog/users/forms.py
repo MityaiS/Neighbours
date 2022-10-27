@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, HiddenField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
 from flaskblog.models import User
 from flask_wtf.file import FileField, FileAllowed
@@ -15,10 +15,10 @@ class UserForm(FlaskForm):
     picture = FileField("Profile picture", validators=[FileAllowed(["jpg", "png"])])
     submit = SubmitField('Create a user')
 
-    def validate_username(self, nickname):
+    def validate_nickname(self, nickname):
         user = User.query.filter_by(nickname=nickname.data).first()
         if user:
-            raise ValidationError('That username is taken. Please choose a different one.')
+            raise ValidationError('That nickname is taken. Please choose a different one.')
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
@@ -30,14 +30,30 @@ class UserForm(FlaskForm):
         if user:
             raise ValidationError("That name is taken.")
 
-class UpdateUserForm(FlaskForm):
-    nickname = StringField('Nickname',
-                           validators=[DataRequired(), Length(min=2, max=20)])
-    name = StringField("Name", validators=[DataRequired(), Length(min=2, max=20)])
-    email = StringField('Email',
-                        validators=[DataRequired(), Email()])
-    picture = FileField("Profile picture", validators=[FileAllowed(["jpg", "png"])])
-    submit = SubmitField('Update user')
+class UpdateUserForm(UserForm):
+    password = None
+    user_id = HiddenField("user_id", validators=[DataRequired()])
+
+    def validate_email(self, email):
+        if User.query.get(int(self.user_id.data)).email != email.data:
+            return super().validate_email(email)
+
+    def validate_name(self, name):
+        if User.query.get(int(self.user_id.data)).name != name.data:
+            return super().validate_name(name)
+
+    def validate_nickname(self, nickname):
+        if User.query.get(int(self.user_id.data)).nickname != nickname.data:
+            return super().validate_nickname(nickname)
+
+# class UpdateUserForm(FlaskForm):
+#     nickname = StringField('Nickname',
+#                            validators=[DataRequired(), Length(min=2, max=20)])
+#     name = StringField("Name", validators=[DataRequired(), Length(min=2, max=20)])
+#     email = StringField('Email',
+#                         validators=[DataRequired(), Email()])
+#     picture = FileField("Profile picture", validators=[FileAllowed(["jpg", "png"])])
+#     submit = SubmitField('Update user')
 
 
 class LoginForm(FlaskForm):
