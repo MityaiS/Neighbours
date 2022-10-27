@@ -1,24 +1,34 @@
 
 import os
-import secrets
 from PIL import Image
 from flask import url_for, current_app
 from flask_mail import Message
 from flaskblog import mail
 
 
-def save_picture(form_picture):
-    random_hex = secrets.token_hex(8)
+def save_picture(form_picture, name):
+    pic_name = name
     _, f_ext = os.path.splitext(form_picture.filename)
-    picture_fn = random_hex + f_ext
+    picture_fn = pic_name + f_ext
     picture_path = os.path.join(current_app.root_path, 'static/profile_pics', picture_fn)
 
-    output_size = (125, 125)
     i = Image.open(form_picture)
+    output_size = (125, 125)
     i.thumbnail(output_size)
+    width, height = i.size
+    print(width, height)
+    offset  = int(abs(height-width)/2)
+    if width>height:
+        i = i.crop((offset,0,width-offset,height))
+    elif height>width:
+        i = i.crop((0,offset,width,height-offset))
     i.save(picture_path)
 
     return picture_fn
+
+def delete_picture(filename):
+    picture_path = os.path.join(current_app.root_path, "static/profile_pics", filename)
+    os.remove(picture_path)
 
 
 def send_reset_email(user):

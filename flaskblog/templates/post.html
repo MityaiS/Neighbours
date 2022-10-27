@@ -13,13 +13,13 @@
           />
         </a>
       </div>
-      <div class="col-2">
+      <div class="col-8">
         <div class="d-flex flex-column">
           <h5 class="fw-bold mb-0">{{post.author.nickname}}</h5>
           <div class="m-0">Post by {{post.author.name}}</div>
         </div>
       </div>
-      {% if post.author == current_user %}
+      {% if post.author == current_user or current_user.get_id() == "1" %}
       <div class="col">
         <a
           class="btn btn-secondary btn-sm mt-1 mb-1"
@@ -71,10 +71,11 @@
           Close
         </button>
         <form
-          action="{{ url_for('posts.delete_post', post_id=post.id) }}"
+          action=""
           method="POST"
         >
-          <input class="btn btn-danger" type="submit" value="Delete" />
+          {{form.hidden_tag()}}
+          {{form.submit(class="btn btn-danger")}}
         </form>
       </div>
     </div>

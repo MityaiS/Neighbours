@@ -52,6 +52,9 @@
             {% else %}
             <a class="nav-link" href="{{ url_for('users.login') }}">Login</a>
             {% endif %}
+            {%if current_user.get_id() == "1"%}
+            <a href="{{url_for('users.create_user')}}" class="nav-link">Create new user</a>
+            {%endif%}
           </div>
         </div>
       </div>

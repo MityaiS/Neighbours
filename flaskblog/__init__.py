@@ -34,6 +34,7 @@ def create_app(config_class=Config):
 
     create_database(app)
 
+
     return app
 
 
