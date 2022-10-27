@@ -31,6 +31,7 @@ class UserForm(FlaskForm):
             raise ValidationError("That name is taken.")
 
 class UpdateUserForm(UserForm):
+    submit = SubmitField("Update a user")
     password = None
     user_id = HiddenField("user_id", validators=[DataRequired()])
 

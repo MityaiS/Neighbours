@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block content %}
 <div class="row mb-3">
-  <h2 class="col-9">Posts by {{ user.name }}({{ posts.total }})</h2>
+  <h2 class="col-12 col-sm-8 col-md-7 col-lg-8">Posts by {{ user.name }}({{ posts.total }})</h2>
   {% if current_user.get_id() == "1" %}
   <div class="col">
     <a
