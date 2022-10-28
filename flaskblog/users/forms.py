@@ -29,6 +29,13 @@ class UserForm(FlaskForm):
         user = User.query.filter_by(name=name.data).first()
         if user:
             raise ValidationError("That name is taken.")
+            
+    def filter_nickname(form, nickname):
+        return nickname.strip()
+
+    def filter_name(form, name):
+        return name.strip()
+
 
 class UpdateUserForm(UserForm):
     submit = SubmitField("Update a user")
